@@ -1,0 +1,51 @@
+a good start would be to know what a static variable is
+
+read functie begrijpen
+
+free the static variable
+don't use memmove
+use strncpy
+and substr
+
+
+read a line until \n
+if nothing has been read, return NULL
+
+read from a file and from standard input
+
+libft is not allowed
+
+compile with flag    -D BUFFER_SIZE=xx
+compile like this:   cc -Wall -Wextra -Werror -D BuFFER_SIZE=42 <files>.c
+
+read must use the BUFFER_SIZE defined during compilation to read from a fie or from stdin
+
+headerfile must have at least the prototype of get_next_line function
+
+BUFFER_SIZE 1, 9999, 10000000
+
+read as little as possible each time the function is called. If you encounter a newline, you have to return the current lint
+Don't read the whole file and than process each line
+
+try to read from a file, from a redirection, from standars input. 
+
+how does your program behave when you send a newline to stdout? and CTRL-D?
+
+lseek is not allowed
+
+file reading must be done only once
+
+undefined behaviour is between two calls the same file descriptor switches to a different file before reading everything from the first fd
+
+undefined behavior when reading from a binary file. If you wish you can make this behavior coherent
+
+global variables are forbidden
+
+the returned line should include the \n except is you have reached the end of file and there is no \newline
+
+
+\BONUS
+
+succeed get_next_line with a single static variable
+
+manage multiple file descriptors with your get_next_line. call getnext line once on 3rd, 4th, 3rd, 5th file without losing the reading thread
