@@ -6,7 +6,7 @@
 /*   By: jaberkro <jaberkro@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/01/08 11:48:43 by jaberkro      #+#    #+#                 */
-/*   Updated: 2022/01/08 16:59:08 by jaberkro      ########   odam.nl         */
+/*   Updated: 2022/01/08 17:43:50 by jaberkro      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,19 +41,23 @@ static int	newline(char *buf, int found)
 
 static void make_leftover(char **leftover, char *endbuf, int len)
 {
-	int	i;
+	int		i;
+	char	*tmp;
 
 	i = 0;
+	tmp = endbuf;
+	//printf("tmp1:%s\n", tmp);
 	// if (*leftover)
-	free(leftover);
+	free(*leftover);
 	*leftover = malloc(len + 1);
 	//printf("leftover:%p\n", leftover);
 	while (i < len)
 	{
-		(*leftover)[i] = endbuf[i];
+		(*leftover)[i] = tmp[i];
 		i++;
 	}
 	(*leftover)[i] = '\0';
+	printf("leftover:%s\n", *leftover);
 	//printf("l:%s  ", *leftover);
 	return ;
 }
@@ -104,6 +108,7 @@ char	*get_next_line(int fd)
 	//char	*tmp;
 	if (fd < 0)
 		return (NULL);
+	printf("left:%s\n", leftover);
 	//if (leftover && leftover[0] == '\0')
 	//	free(leftover);
 	out = make_new(NULL, leftover, ft_strlen(leftover), &leftover);
@@ -124,7 +129,8 @@ char	*get_next_line(int fd)
 	{
 		
 		//if (leftover)
-		// 	free(leftover);
+		//free(leftover);
+		//leftover = NULL;
 		return (out);
 	}
 	//printf("leftover len before sending:%d\n", ft_strlen(leftover));
@@ -134,6 +140,12 @@ char	*get_next_line(int fd)
 		found = read(fd, buf, BUFFER_SIZE);
 	}
 	out = make_new(out, buf, found, &leftover);
+	if (found < BUFFER_SIZE)// && !ft_strlen(leftover))// && newline(leftover, ft_strlen(leftover)) == -1) //|| newline(buf, found) != -1)
+	{
+		free(leftover);
+		leftover = NULL;
+	}
+	//else if (found == BUFFER_SIZE && )
 	//printf("found: %d buf: %s out:\n%s", found, buf, out);
 	return (out);
 }
