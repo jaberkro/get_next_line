@@ -6,7 +6,7 @@
 /*   By: jaberkro <jaberkro@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/01/08 11:48:43 by jaberkro      #+#    #+#                 */
-/*   Updated: 2022/01/08 16:23:10 by jaberkro      ########   odam.nl         */
+/*   Updated: 2022/01/08 16:59:08 by jaberkro      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,22 +39,23 @@ static int	newline(char *buf, int found)
 	return (-1);
 }
 
-static char *make_leftover(char* leftover, char *endbuf, int len)
+static void make_leftover(char **leftover, char *endbuf, int len)
 {
 	int	i;
 
 	i = 0;
 	// if (*leftover)
-	// 	free(*leftover);
-	leftover = malloc(len + 1);
+	free(leftover);
+	*leftover = malloc(len + 1);
+	//printf("leftover:%p\n", leftover);
 	while (i < len)
 	{
-		leftover[i] = endbuf[i];
+		(*leftover)[i] = endbuf[i];
 		i++;
 	}
-	leftover[i] = '\0';
+	(*leftover)[i] = '\0';
 	//printf("l:%s  ", *leftover);
-	return (leftover);
+	return ;
 }
 
 char	*make_new(char *out, char *buf, int found, char	**leftover)
@@ -70,8 +71,9 @@ char	*make_new(char *out, char *buf, int found, char	**leftover)
 	outlen = ft_strlen(out);
 	//printf("len: %d\n", outlen + found);
 	new = malloc(outlen + found + 1);
+	//printf("new:%p\n", new);
 	if (new == NULL)
-		return (NULL);
+		return (out);
 	while (i < outlen)
 	{
 		new[i] = out[i];
@@ -83,13 +85,13 @@ char	*make_new(char *out, char *buf, int found, char	**leftover)
 		i++;
 		if (buf[i - 1 - outlen] == '\n')
 		{
-			*leftover = make_leftover(*leftover, buf + i - outlen, found - i + outlen);
+			make_leftover(leftover, buf + i - outlen, found - i + outlen);
 			break;
 		}
 	}
 	new[i] = '\0';
 	//printf("returning this:%s\n", new);
-	//free (out);
+	free (out);
 	return (new);
 }
 
@@ -99,12 +101,12 @@ char	*get_next_line(int fd)
 	char		buf[BUFFER_SIZE + 1];
 	char		*out;
 	static char	*leftover;
-
+	//char	*tmp;
 	if (fd < 0)
 		return (NULL);
 	//if (leftover && leftover[0] == '\0')
 	//	free(leftover);
-	out = make_new("", leftover, ft_strlen(leftover), &leftover);
+	out = make_new(NULL, leftover, ft_strlen(leftover), &leftover);
 	if (newline(out, ft_strlen(out)) != -1)
 		return (out);
 	//buf = malloc(BUFFER_SIZE + 1);
@@ -114,16 +116,15 @@ char	*get_next_line(int fd)
 	buf[found] = '\0';
 	if ((found <= 0 && out == NULL) || found == -1 || (found == 0 && leftover == NULL) || (found == 0 && leftover && leftover[0] == '\0'))
 	{
-		//free(buf);
 		if (out)
 			free (out);
 		return (NULL);
 	}
 	else if (found == 0 && out)
 	{
-		//free(buf);
-		if (leftover)
-			free(leftover);
+		
+		//if (leftover)
+		// 	free(leftover);
 		return (out);
 	}
 	//printf("leftover len before sending:%d\n", ft_strlen(leftover));
@@ -134,7 +135,6 @@ char	*get_next_line(int fd)
 	}
 	out = make_new(out, buf, found, &leftover);
 	//printf("found: %d buf: %s out:\n%s", found, buf, out);
-	//free(buf);
 	return (out);
 }
 
