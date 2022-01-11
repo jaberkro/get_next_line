@@ -6,11 +6,13 @@
 /*   By: jaberkro <jaberkro@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/01/08 11:48:43 by jaberkro      #+#    #+#                 */
-/*   Updated: 2022/01/11 21:33:42 by jaberkro      ########   odam.nl         */
+/*   Updated: 2022/01/11 22:10:25 by jaberkro      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "get_next_line.h"
+
+//LITTLE COMMENT TO READER: MAKE_NEW is something like strjoin, MAKE_LEFTOVER like strlcpy, NEWLINE like strchr and STRLEN a simple version of strlen
 
 static int	ft_strlen(char *input)
 {
