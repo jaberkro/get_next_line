@@ -6,7 +6,7 @@
 /*   By: jaberkro <jaberkro@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/01/08 11:48:43 by jaberkro      #+#    #+#                 */
-/*   Updated: 2022/01/11 14:58:08 by jaberkro      ########   odam.nl         */
+/*   Updated: 2022/01/11 16:55:40 by jaberkro      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,7 +38,7 @@ static int	newline(char *buf, int found)
 	return (-1);
 }
 
-static void make_leftover(char *leftover, char *endbuf, int len)
+static void	make_leftover(char *leftover, char *endbuf, int len)
 {
 	int		i;
 
@@ -90,22 +90,14 @@ char	*get_next_line(int fd)
 	char		buf[BUFFER_SIZE + 1];
 	static char	leftover[BUFFER_SIZE + 1];
 
-	if (fd < 0)
-		return (NULL);
 	out = make_new(NULL, leftover, ft_strlen(leftover), leftover);
 	if (newline(out, ft_strlen(out)) != -1)
 		return (out);
 	found = read(fd, buf, BUFFER_SIZE);
-	buf[found] = '\0';
-	if ((found <= 0 && out == NULL) || found == -1 || (found == 0 && leftover[0] == '\0'))
+	if (found == -1 || (found == 0 && (out == NULL || leftover[0] == '\0')))
 	{
 		free(out);
 		return (NULL);
-	}
-	else if (found == 0 && out[0])
-	{
-		leftover[0] = '\0';
-		return (out);
 	}
 	while (found == BUFFER_SIZE && newline(buf, found) == -1)
 	{
