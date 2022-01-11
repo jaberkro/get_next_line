@@ -6,7 +6,7 @@
 /*   By: jaberkro <jaberkro@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/01/08 11:48:43 by jaberkro      #+#    #+#                 */
-/*   Updated: 2022/01/11 16:55:40 by jaberkro      ########   odam.nl         */
+/*   Updated: 2022/01/11 21:33:42 by jaberkro      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,16 +63,14 @@ char	*make_new(char *out, char *buf, int found, char	*leftover)
 	new = malloc(outlen + found + 1);
 	if (new == NULL)
 		return (out);
-	while (i < outlen)
-	{
-		new[i] = out[i];
-		i++;
-	}
 	while (i < outlen + found)
 	{
-		new[i] = buf[i - outlen];
+		if (i < outlen)
+			new[i] = out[i];
+		else
+			new[i] = buf[i - outlen];
 		i++;
-		if (buf[i - 1 - outlen] == '\n')
+		if (i > outlen && buf[i - 1 - outlen] == '\n')
 		{
 			make_leftover(leftover, buf + i - outlen, found - i + outlen);
 			break ;
@@ -94,7 +92,7 @@ char	*get_next_line(int fd)
 	if (newline(out, ft_strlen(out)) != -1)
 		return (out);
 	found = read(fd, buf, BUFFER_SIZE);
-	if (found == -1 || (found == 0 && (out == NULL || leftover[0] == '\0')))
+	if (found == -1 || out == NULL || (found == 0 && leftover[0] == '\0'))
 	{
 		free(out);
 		return (NULL);
