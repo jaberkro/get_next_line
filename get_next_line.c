@@ -6,7 +6,7 @@
 /*   By: jaberkro <jaberkro@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/01/08 11:48:43 by jaberkro      #+#    #+#                 */
-/*   Updated: 2022/01/08 18:38:34 by jaberkro      ########   odam.nl         */
+/*   Updated: 2022/01/11 14:58:08 by jaberkro      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,7 +75,7 @@ char	*make_new(char *out, char *buf, int found, char	*leftover)
 		if (buf[i - 1 - outlen] == '\n')
 		{
 			make_leftover(leftover, buf + i - outlen, found - i + outlen);
-			break;
+			break ;
 		}
 	}
 	new[i] = '\0';
@@ -113,6 +113,8 @@ char	*get_next_line(int fd)
 		found = read(fd, buf, BUFFER_SIZE);
 	}
 	out = make_new(out, buf, found, leftover);
+	if (newline(out, ft_strlen(out)) == -1)
+		leftover[0] = '\0';
 	return (out);
 }
 
