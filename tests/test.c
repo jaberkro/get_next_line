@@ -3,10 +3,10 @@
 /*                                                        ::::::::            */
 /*   test.c                                             :+:    :+:            */
 /*                                                     +:+                    */
-/*   By: Jorien <Jorien@student.codam.nl>             +#+                     */
+/*   By: jaberkro <jaberkro@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
-/*   Created: 2022/01/05 13:50:30 by Jorien        #+#    #+#                 */
-/*   Updated: 2022/01/12 13:05:45 by jaberkro      ########   odam.nl         */
+/*   Created: 2022/01/12 13:56:40 by jaberkro      #+#    #+#                 */
+/*   Updated: 2022/01/12 13:56:47 by jaberkro      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
