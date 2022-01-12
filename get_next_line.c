@@ -6,13 +6,11 @@
 /*   By: jaberkro <jaberkro@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/01/08 11:48:43 by jaberkro      #+#    #+#                 */
-/*   Updated: 2022/01/12 10:47:55 by jaberkro      ########   odam.nl         */
+/*   Updated: 2022/01/12 11:19:07 by jaberkro      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "get_next_line.h"
-
-//LITTLE COMMENT TO READER: MAKE_NEW is something like strjoin, MAKE_LEFTOVER like strlcpy, NEWLINE like strchr and STRLEN a simple version of strlen
 
 static int	ft_strlen(char *input)
 {
@@ -63,8 +61,8 @@ char	*make_new(char *out, char *buf, int found, char	*leftover)
 	i = 0;
 	outlen = ft_strlen(out);
 	new = malloc(outlen + found + 1);
-	if (new == NULL)
-		return (out);
+	if (new == NULL) 
+		return (out); // SHOULD I HERE FIRST FREE OUT AND RETURN NULL?
 	while (i < outlen + found)
 	{
 		if (i < outlen)
@@ -102,8 +100,8 @@ char	*get_next_line(int fd)
 	while (found == BUFFER_SIZE && newline(buf, found) == -1)
 	{
 		out = make_new(out, buf, found, leftover);
-		//if (out == NULL)
-		//	return (NULL);
+		if (out == NULL)
+			return (NULL);
 		found = read(fd, buf, BUFFER_SIZE);
 	}
 	out = make_new(out, buf, found, leftover);
