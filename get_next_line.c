@@ -6,7 +6,7 @@
 /*   By: jaberkro <jaberkro@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/01/08 11:48:43 by jaberkro      #+#    #+#                 */
-/*   Updated: 2022/01/12 11:19:07 by jaberkro      ########   odam.nl         */
+/*   Updated: 2022/01/12 11:27:09 by jaberkro      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,11 +55,11 @@ static void	make_leftover(char *leftover, char *endbuf, int len)
 char	*make_new(char *out, char *buf, int found, char	*leftover)
 {
 	char	*new;
-	int		outlen;
+	int		outlen; // removable but would make code slower
 	int		i;
 
 	i = 0;
-	outlen = ft_strlen(out);
+	outlen = ft_strlen(out); // removable but would make code slower
 	new = malloc(outlen + found + 1);
 	if (new == NULL) 
 		return (out); // SHOULD I HERE FIRST FREE OUT AND RETURN NULL?
