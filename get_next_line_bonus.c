@@ -5,104 +5,77 @@
 /*                                                     +:+                    */
 /*   By: jaberkro <jaberkro@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
-/*   Created: 2022/01/08 11:48:43 by jaberkro      #+#    #+#                 */
-/*   Updated: 2022/01/12 12:38:26 by jaberkro      ########   odam.nl         */
+/*   Created: 2022/01/19 21:12:24 by jaberkro      #+#    #+#                 */
+/*   Updated: 2022/01/19 21:32:52 by jaberkro      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "get_next_line.h"
 
-static void	make_leftover(char *leftover, char *endbuf, int len)
+static void	gnl_memmove(char *input, int start, int len)
 {
-	int		i;
+	int	i;
 
 	i = 0;
-	while (i < len)
+	while (i + start < len)
 	{
-		leftover[i] = endbuf[i];
+		input[i] = input[start + i];
 		i++;
 	}
-	leftover[i] = '\0';
-	return ;
+	input[i] = '\0';
 }
 
-static char	*make_new(char *out, char *buf, int found, char	*leftover)
+static char	*gnl_strjoin(char *s1, char *s2, int s1len, int s2len)
 {
-	char	*new;
-	int		outlen;
 	int		i;
+	char	*out;
 
 	i = 0;
-	outlen = gnl_strlen(out);
-	new = malloc(outlen + found + 1);
-	while (new != NULL && i < outlen + found)
+	out = malloc(s1len + s2len + 1);
+	if (out == NULL)
+		return (NULL);
+	while (i < s1len + s2len)
 	{
-		if (i < outlen)
-			new[i] = out[i];
+		if (i < s1len)
+			out[i] = s1[i];
 		else
-			new[i] = buf[i - outlen];
+			out[i] = s2[i - s1len];
 		i++;
-		if (i > outlen && buf[i - 1 - outlen] == '\n')
+		if (i > s1len && out[i - 1] == '\n')
 		{
-			make_leftover(leftover, buf + i - outlen, found - i + outlen);
+			gnl_memmove(s2, i - s1len, s2len);
 			break ;
 		}
 	}
-	if (new != NULL)
-		new[i] = '\0';
-	free(out);
-	return (new);
+	out[i] = '\0';
+	free(s1);
+	return (out);
 }
 
 char	*get_next_line(int fd)
 {
-	int			found;
-	char		*out;
-	char		buf[BUFFER_SIZE + 1];
-	static char	leftover[BUFFER_SIZE + 1];
+	static char	buf[BUFFER_SIZE + 1];
+	char		*output;
+	int			buflen;
 
-	out = make_new(NULL, leftover, gnl_strlen(leftover), leftover);
-	if (out == NULL || newline(out, gnl_strlen(out)) != -1)
-		return (out);
-	found = read(fd, buf, BUFFER_SIZE);
-	if (found == -1 || (found == 0 && leftover[0] == '\0'))
+	output = gnl_strjoin(NULL, buf, 0, gnl_strlen(buf));
+	if (output == NULL || gnl_strchr_nl(output) != -1)
+		return (output);
+	buflen = read(fd, buf, BUFFER_SIZE);
+	if (buflen == -1 || (buflen == 0 && output[0] == '\0'))
 	{
-		free(out);
+		free(output);
 		return (NULL);
 	}
-	while (found == BUFFER_SIZE && newline(buf, found) == -1)
+	while (buflen == BUFFER_SIZE && gnl_strchr_nl(buf) == -1)
 	{
-		out = make_new(out, buf, found, leftover);
-		if (out == NULL)
+		output = gnl_strjoin(output, buf, gnl_strlen(output), buflen);
+		if (output == NULL)
 			return (NULL);
-		found = read(fd, buf, BUFFER_SIZE);
+		buflen = read(fd, buf, BUFFER_SIZE);
 	}
-	out = make_new(out, buf, found, leftover);
-	if (out != NULL && newline(out, gnl_strlen(out)) == -1)
-		leftover[0] = '\0';
-	return (out);
+	output = gnl_strjoin(output, buf, gnl_strlen(output), buflen);
+	if (output != NULL && gnl_strchr_nl(output) == -1)
+		buf[0] = '\0';
+	return (output);
 }
-
-/*
-	READ
-		- read x bytes from the object referenced by the fd into the buffer
-
-		RETURN VALUES
-		- number of byter actually read
-		- zero upon reading end-of-file
-		- -1 if an error occured
-
-	MALLOC
-		- allocates memory that can be used for any data type
-		- allocates x bytes of memory and returns pointer to allocated memory
-
-		RETURN VALUES
-		- if succesfull, malloc returns a pointer to allocated memory
-		- if there is an error, malloc returns NULL
-
-	FREE 
-		- frees allocations that were created via the malloc function
-
-		RETURN VALUE
-		- free does not return a value
-*/

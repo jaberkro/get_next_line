@@ -5,33 +5,29 @@
 /*                                                     +:+                    */
 /*   By: jaberkro <jaberkro@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
-/*   Created: 2022/01/08 11:48:31 by jaberkro      #+#    #+#                 */
-/*   Updated: 2022/01/12 12:44:51 by jaberkro      ########   odam.nl         */
+/*   Created: 2022/01/19 21:12:19 by jaberkro      #+#    #+#                 */
+/*   Updated: 2022/01/19 21:16:52 by jaberkro      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "get_next_line.h"
-
 int	gnl_strlen(char *input)
-{
-	int	count;
-
-	count = 0;
-	if (!input)
-		return (0);
-	while (input && input[count])
-		count++;
-	return (count);
-}
-
-int	newline(char *buf, int found)
 {
 	int	i;
 
 	i = 0;
-	while (i < found)
+	while (input && input[i])
+		i++;
+	return (i);
+}
+
+int	gnl_strchr_nl(char *input)
+{
+	int	i;
+
+	i = 0;
+	while (input && input[i])
 	{
-		if (buf[i] == '\n')
+		if (input[i] == '\n')
 			return (i);
 		i++;
 	}
