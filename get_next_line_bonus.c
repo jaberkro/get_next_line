@@ -1,16 +1,22 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        ::::::::            */
-/*   get_next_line.c                                    :+:    :+:            */
+/*   get_next_line_bonus.c                              :+:    :+:            */
 /*                                                     +:+                    */
 /*   By: jaberkro <jaberkro@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/01/19 21:12:24 by jaberkro      #+#    #+#                 */
-/*   Updated: 2022/01/19 21:32:52 by jaberkro      ########   odam.nl         */
+/*   Updated: 2022/01/24 15:10:32 by jaberkro      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "get_next_line.h"
+#include <unistd.h>
+#include <fcntl.h>
+#include <stdlib.h>
+
+int		gnl_strlen(char *input);
+int		gnl_strchr_nl(char *input);
 
 static void	gnl_memmove(char *input, int start, int len)
 {

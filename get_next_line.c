@@ -6,11 +6,17 @@
 /*   By: jaberkro <jaberkro@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/01/19 21:12:24 by jaberkro      #+#    #+#                 */
-/*   Updated: 2022/01/19 21:32:52 by jaberkro      ########   odam.nl         */
+/*   Updated: 2022/01/24 15:06:46 by jaberkro      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "get_next_line.h"
+#include <unistd.h>
+#include <fcntl.h>
+#include <stdlib.h>
+
+int	gnl_strlen(char *input);
+int	gnl_strchr_nl(char *input);
 
 static void	gnl_memmove(char *input, int start, int len)
 {
@@ -67,14 +73,18 @@ char	*get_next_line(int fd)
 		free(output);
 		return (NULL);
 	}
-	while (buflen == BUFFER_SIZE && gnl_strchr_nl(buf) == -1)
+	while (buflen != 0 && gnl_strchr_nl(output) == -1)
 	{
 		output = gnl_strjoin(output, buf, gnl_strlen(output), buflen);
 		if (output == NULL)
 			return (NULL);
 		buflen = read(fd, buf, BUFFER_SIZE);
+		if (buflen == -1)
+		{
+			free(output);
+			return (NULL);
+		}
 	}
-	output = gnl_strjoin(output, buf, gnl_strlen(output), buflen);
 	if (output != NULL && gnl_strchr_nl(output) == -1)
 		buf[0] = '\0';
 	return (output);
