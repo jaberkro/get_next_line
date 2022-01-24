@@ -6,7 +6,7 @@
 /*   By: jaberkro <jaberkro@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/01/19 21:12:24 by jaberkro      #+#    #+#                 */
-/*   Updated: 2022/01/24 15:10:32 by jaberkro      ########   odam.nl         */
+/*   Updated: 2022/01/24 15:49:25 by jaberkro      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,8 +15,8 @@
 #include <fcntl.h>
 #include <stdlib.h>
 
-int		gnl_strlen(char *input);
-int		gnl_strchr_nl(char *input);
+int	gnl_strlen(char *input);
+int	gnl_strchr_nl(char *input);
 
 static void	gnl_memmove(char *input, int start, int len)
 {
@@ -58,6 +58,12 @@ static char	*gnl_strjoin(char *s1, char *s2, int s1len, int s2len)
 	return (out);
 }
 
+char	*free_return(char *tofree)
+{
+	free(tofree);
+	return (NULL);
+}
+
 char	*get_next_line(int fd)
 {
 	static char	buf[BUFFER_SIZE + 1];
@@ -69,18 +75,16 @@ char	*get_next_line(int fd)
 		return (output);
 	buflen = read(fd, buf, BUFFER_SIZE);
 	if (buflen == -1 || (buflen == 0 && output[0] == '\0'))
-	{
-		free(output);
-		return (NULL);
-	}
-	while (buflen == BUFFER_SIZE && gnl_strchr_nl(buf) == -1)
+		return (free_return(output));
+	while (buflen != 0 && gnl_strchr_nl(output) == -1)
 	{
 		output = gnl_strjoin(output, buf, gnl_strlen(output), buflen);
-		if (output == NULL)
-			return (NULL);
+		if (output == NULL || gnl_strchr_nl(output) != -1)
+			return (output);
 		buflen = read(fd, buf, BUFFER_SIZE);
+		if (buflen == -1)
+			return (free_return(output));
 	}
-	output = gnl_strjoin(output, buf, gnl_strlen(output), buflen);
 	if (output != NULL && gnl_strchr_nl(output) == -1)
 		buf[0] = '\0';
 	return (output);
