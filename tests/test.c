@@ -6,7 +6,7 @@
 /*   By: jaberkro <jaberkro@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/01/12 13:56:40 by jaberkro      #+#    #+#                 */
-/*   Updated: 2022/01/12 13:56:47 by jaberkro      ########   odam.nl         */
+/*   Updated: 2022/01/24 16:21:11 by jaberkro      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,9 +18,10 @@
 
 int main()
 {
-    int fd1 = open("test4.txt", O_RDONLY);
+    int fd1 = open("test.txt", O_RDONLY);
     int fd2 = open("test2.txt", O_RDONLY);
     int fd3 = open("test3.txt", O_RDONLY);
+    int fd4 = open("test4.txt", O_RDONLY);
     int i = 0;
     char *nl;
     
@@ -44,7 +45,14 @@ int main()
         printf("gnl:%s", nl);
         i++;
     }
+    while (i < 10)
+    {
+        nl = get_next_line(fd4);
+        printf("gnl:%s", nl);
+        i++;
+    }
     close (fd1);
     close (fd2);
     close (fd3);
+    close (fd4);
 }
