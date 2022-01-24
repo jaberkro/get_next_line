@@ -6,7 +6,7 @@
 /*   By: jaberkro <jaberkro@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/01/12 13:56:40 by jaberkro      #+#    #+#                 */
-/*   Updated: 2022/01/24 16:21:11 by jaberkro      ########   odam.nl         */
+/*   Updated: 2022/01/24 16:22:03 by jaberkro      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,6 +45,7 @@ int main()
         printf("gnl:%s", nl);
         i++;
     }
+    i = 0;
     while (i < 10)
     {
         nl = get_next_line(fd4);
